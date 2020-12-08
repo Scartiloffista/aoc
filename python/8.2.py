@@ -71,7 +71,7 @@ def evaluate(lines, visited, i, acc, is_changed):
             return_values.append(ret_val)
 
 
-    return [x for x in return_values if x is not None]
+    return next((x for x in return_values if x is not None), None)
 
 
 val = evaluate(lines, visited, 0, 0, False)
