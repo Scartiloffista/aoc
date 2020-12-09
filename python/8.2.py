@@ -76,4 +76,3 @@ def evaluate(lines, visited, i, acc, is_changed):
 
 val = evaluate(lines, visited, 0, 0, False)
 print(val)
-
