@@ -8,7 +8,7 @@ with open(path, "r") as f:
 list_numbers = sorted([int(x) for x in lines])
 
 
-## p1
+# p1
 sum_diff_1 = 1
 sum_diff_3 = 1
 
@@ -19,18 +19,21 @@ for i in range(len(list_numbers)-1):
         sum_diff_1 += 1
     elif a - b == 3:
         sum_diff_3 += 1
-    else:
-        pass
 
 print(sum_diff_1 * sum_diff_3)
 
-## p2
+# p2
 list_of_combination = [0] * len(list_numbers)
 enumeration = list(enumerate(list_numbers))
 for i, x in enumeration:
     actual_adapter = x
-    candidates = [j for j, x in enumeration if actual_adapter - 3 <= x <= actual_adapter-1]
+    start = i-3 if i > 3 else 0  # just looking for optimization?
+    
+    candidates = [j for j, x in enumeration[start:i]
+                  if actual_adapter - 3 <= x <= actual_adapter-1]
+
     list_of_combination[i] = sum([list_of_combination[j] for j in candidates])
+    
     if 0 <= actual_adapter <= 3:
         list_of_combination[i] += 1
     pass
