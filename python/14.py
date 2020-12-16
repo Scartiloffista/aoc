@@ -1,6 +1,6 @@
 import pathlib
 
-path = pathlib.Path('.').parent / "inputs/14.txt"
+path = pathlib.Path('.').parent / "inputs/14.txt.test"
 with open(path, "r") as f:
     instructions = [x.split(" = ") for x in f.read().splitlines()]
 
@@ -61,3 +61,4 @@ for instr, n in instructions:
             mem[i] = int(n)
 
 val = sum(mem.values())
+print(val)
