@@ -42,7 +42,6 @@ for i in nearby_tickets:
 summ = sum(list_of_invalid_numbers)
 print(summ)
 
-
 # p2
 legend = {x: list(rules_dict.keys()) for x in range(len(nearby_tickets[0].split(",")))}
 
