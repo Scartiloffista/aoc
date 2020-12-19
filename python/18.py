@@ -51,6 +51,9 @@ def evaluate(expr):
 
 sum = 0
 for line in lines:
-    expression = expr.parseString(line[::-1].replace(")", ":").replace("(", ")").replace(":", "("))
+    expression = expr.parseString(line)
     sum += evaluate(expression.asList())
 print(sum)
+
+
+
