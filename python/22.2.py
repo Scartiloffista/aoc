@@ -6,15 +6,14 @@ import itertools
 def main(p1, p2):
     count = 1
     set_previous_games = set()
-    # set_previous_games.add((p1, p2))
     while p1 and p2:
         if (tuple(p1), tuple(p2)) in set_previous_games:
-            # todo implement win p1
             return 1, p1
         else:
             set_previous_games.add((tuple(p1), tuple(p2)))
             p1_card, p2_card = p1.popleft(), p2.popleft()
             if p1_card <= len(p1) and p2_card <= len(p2):
+                # fuck python not giving slices to deque
                 new_p1 = deque(itertools.islice(p1, 0, p1_card))
                 new_p2 = deque(itertools.islice(p2, 0, p2_card))
                 ret, _ = main(new_p1, new_p2)
