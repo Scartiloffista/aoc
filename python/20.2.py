@@ -224,6 +224,11 @@ import re
 
 
 for rotation in all_rotations(final_list):
+    count_hs = 0
+    count_hs += "..................#.".count("#")
+    count_hs += "#....##....##....###".count("#")
+    count_hs += ".#..#..#..#..#..#...".count("#")
+    found_dragons = 0
 
     for i in range(len(rotation) - 3):
         # -- ..................#.
@@ -249,4 +254,12 @@ for rotation in all_rotations(final_list):
                         r".#..#..#..#..#..#...", rotation[i + 2]
                     ).start()
                     if first_i == second_i == third_i:
-                        print("trovato!")
+                        found_dragons += 1
+    if found_dragons > 0:
+        good_rot = rotation
+
+count = 0
+for i in good_rot:
+    count += i.count("#")
+
+print(count - found_dragons * count_hs)
