@@ -81,40 +81,50 @@ RIGA = 2000000
 
 acc = 0
 
-ranges = []
 
-for b, s, d in list_bsd:
+def elaborate(ranges):
 
-    candidato = (s[0], RIGA) # controllo sulla riga ma stessa colonna del sensore
+    ranges.sort(key=lambda x: x[0])
 
-    distanza_riga_sensore =  abs(s[1]-RIGA)
-    if distanza_riga_sensore <= d: # l'area di sto sensore tozza la riga
-        
-        min_x_area = s[0]-(d-distanza_riga_sensore)
-        max_x_area = s[0]+(d-distanza_riga_sensore)
+    i = 0
+    while i < len(ranges) -1:
 
-        numero_cosi = (d-distanza_riga_sensore)*2+1
+        start, end = ranges[i]
+        start1, end1 = ranges[i+1]
 
-        ranges.append([min_x_area, max_x_area])
+        if end >= start1 and end >= end1:
+            ranges[i] = [start, end]
+            del ranges[i+1]
+        elif end >= start1 and end1 >= end:
+            ranges[i] = [start, end1]
+            del ranges[i+1]
+        else:
+            i += 1
+    return ranges
 
 
-ranges.sort(key=lambda x: x[0])
 
-i = 0
+for r in range(4000000, -1, -1):
 
-while i < len(ranges) -1:
+    ranges = []
 
-    start, end = ranges[i]
-    start1, end1 = ranges[i+1]
 
-    if end >= start1 and end >= end1:
-        ranges[i] = [start, end]
-        del ranges[i+1]
-    elif end >= start1 and end1 >= end:
-        ranges[i] = [start, end1]
-        del ranges[i+1]
-    else:
-        i += 1
 
-p1 = sum(abs(x) + abs(y) for x, y in ranges)
-print(p1)
+    for b, s, d in list_bsd:
+
+        distanza_riga_sensore = abs(s[1]-r)
+        if distanza_riga_sensore <= d: # l'area di sto sensore tozza la riga
+            
+            min_x_area = max(0, s[0]-(d-distanza_riga_sensore))
+            max_x_area = min(s[0]+(d-distanza_riga_sensore), 4000000)
+
+
+            ranges.append([min_x_area, max_x_area])
+
+
+    ranges = elaborate(ranges)
+    if len(ranges) > 1 or ranges[0] != [0,4000000]:
+        print(r)
+        print(ranges)
+        import sys
+        sys.exit(0)

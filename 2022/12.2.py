@@ -1,5 +1,5 @@
-
 import pathlib
+
 
 path = pathlib.Path('.') / "12.txt"
 with open(path, "r") as f:
@@ -21,7 +21,6 @@ for y, row in enumerate(inputt):
     for x, c in enumerate(row):
         
         pos = (y,x)
-        # available_pos.add(pos)
         prev[pos] = None
 
         if c == 'S' or c == 'a':
@@ -34,7 +33,6 @@ for y, row in enumerate(inputt):
             if c == 'E': 
                 pos_E = pos
                 inputt[y][x] = 'z'
-                # dist[pos] = 0
         
         dist[pos] = float('inf')
             
@@ -44,6 +42,7 @@ a_pos = None
 dist[pos_E] = 0
 
 while len(q) > 0:
+    # _, u = heapq.heappop(q)
     u = min(q, key=dist.get)
 
     uy, ux = u
@@ -51,11 +50,11 @@ while len(q) > 0:
         a_pos = u
         break
 
+
     q.discard(u)
 
     neighs = []
     for y, x in [(1,0), (0,1), (-1, 0), (0,-1)]:
-        # for x in [-1, 0, 1]:
             
         cy, cx = u
         v = tuple(map(sum,zip(u, (y, x))))
@@ -64,11 +63,14 @@ while len(q) > 0:
             current_val = ord(inputt[cy][cx])
             neigh_val = ord(inputt[ny][nx])
 
-            if (x,y) != (0,0) and neigh_val >= current_val-1:                
+            if (x,y) != (0,0) and neigh_val >= current_val-1:
+                
                 alt = dist[u] + 1
                 if alt < dist[v]:
                     dist[v] = alt
                     prev[v] = u
+
+    
 
 flag = False
 curr = a_pos
@@ -77,7 +79,6 @@ while curr is not pos_E:
     curr = prev[curr]
     y, x = curr
     i+=1
-
 
 
 print(i)

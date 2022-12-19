@@ -79,10 +79,10 @@ object Eleven extends App {
 
     val operation =
       lines(2).split("Operation: new = old ").last.split(" ") match {
-        case Array("*", "old") => x: BigInt => x * x
-        case Array("+", "old") => x: BigInt => x + x
-        case Array("+", y)     => x: BigInt => x + BigInt(y)
-        case Array("*", y)     => x: BigInt => x * BigInt(y)
+        case Array("*", "old") => (x: BigInt) => x * x
+        case Array("+", "old") => (x: BigInt) => x + x
+        case Array("+", y)     => (x: BigInt) => x + BigInt(y)
+        case Array("*", y)     => (x: BigInt) => x * BigInt(y)
       }
 
 
