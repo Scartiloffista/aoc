@@ -4,21 +4,21 @@ import utils.ReadFile
 
 case class File(name: String, size: Int)
 
-case class Node(
+case class NodeDaySeven(
     name: String,
-    var folders: Seq[Node],
+    var folders: Seq[NodeDaySeven],
     var files: Seq[File],
-    parent: Option[Node],
+    parent: Option[NodeDaySeven],
     var size: Int = 0
 ) {
-  override def toString = s"Node($name)"
+  override def toString = s"NodeDaySeven($name)"
 }
 
 object Seven extends App {
 
-  var nodes: List[Node] = List[Node]()
+  var nodes: List[NodeDaySeven] = List[NodeDaySeven]()
 
-  def navigate(node: Node): Int = {
+  def navigate(node: NodeDaySeven): Int = {
 
     var acc = 0
     for (child <- node.folders) {
@@ -31,7 +31,7 @@ object Seven extends App {
     acc
   }
 
-  val root = Node("/", Nil, Nil, None)
+  val root = NodeDaySeven("/", Nil, Nil, None)
   var current = root
 
   val input = ReadFile.getString("7")
@@ -47,7 +47,7 @@ object Seven extends App {
           .map(x => File(x(1), x(0).toInt))
         val folders = item.tail
           .filter(_.split(" ").head == "dir")
-          .map(x => Node(x.split(" ")(1), Nil, Nil, Some(current)))
+          .map(x => NodeDaySeven(x.split(" ")(1), Nil, Nil, Some(current)))
 
         current.files = files
         current.folders = folders
