@@ -7,7 +7,7 @@ case class Node(name: String, flow: Int, edges: Seq[String])
 
 object Sixteen extends App {
 
-  val input = ReadFile.getLines("16.example")
+  val input = ReadFile.getLines("16")
 
   val nodes: Set[Node] = input.map(parseLine).toSet
 
@@ -16,8 +16,6 @@ object Sixteen extends App {
   val memo = mutable.Map[(Node, Set[Node], Int), (Int, Set[Node])]()
 
   val foo = buildMatrix(starting, Set.empty, 30)
-
-  println(foo._2.map(_.name))
 
   println(foo._1)
 
@@ -44,13 +42,10 @@ object Sixteen extends App {
          candidates.map {
            case (n, o, m) => {
              val foo = handleMemo(n, o + current, m - 1)
-             (foo._1 + current.flow * minute, foo._2)
+             (foo._1 + current.flow * (minute-1), foo._2)
            }
          }
        })
-
-    if (minute == 30)
-      println(sureCandidates)
 
     val foo = sureCandidates.toList.maxBy(_._1)
 
@@ -115,7 +110,6 @@ object Sixteen extends App {
     if (!memo.contains((n, o, m))) {
       memo.put((n, o, m), buildMatrix(n, o, m))
     }
-
     memo((n, o, m))
   }
 
