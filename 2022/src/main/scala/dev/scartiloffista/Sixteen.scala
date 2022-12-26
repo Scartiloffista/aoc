@@ -13,107 +13,61 @@ object Sixteen extends App {
 
   val starting = nodes.filter(_.name == "AA").head
 
-  val memo = mutable.Map[(Node, Set[Node], Int), (Int, Set[Node])]()
+  val memo = mutable.Map[(Node, Set[Node], Int, Boolean), Int]()
 
-  val foo = buildMatrix(starting, Set.empty, 30)
-
-  println(foo._1)
+  print(buildMatrix(starting, Set.empty, 30, false))
+  print(buildMatrix(starting, Set.empty, 26, true))
 
   def buildMatrix(
       current: Node,
       open: Set[Node],
-      minute: Int
-  ): (Int, Set[Node]) = {
+      minute: Int,
+      repeat: Boolean
+  ): Int = {
 
+    // finishing or restarting for the elephant?
     if (minute <= 0) {
-      return (0, open)
+      if(!repeat) {
+        return 0
+      }
+      else {
+        return buildMatrix(starting, open, 26, false)
+      }
     }
 
+    // where i can go, with new status
     val candidates: Set[(Node, Set[Node], Int)] = nodes
       .filter(n => current.edges.contains(n.name))
       .map((_, open, minute - 1))
 
-    val sureCandidates: Set[(Int, Set[Node])] = candidates.map {
-      case (n, o, m) => handleMemo(n, o, m)
+    // results for candidates
+    val sureCandidates: Set[Int] = candidates.map { case (n, o, m) =>
+      handleMemo(n, o, m, repeat)
     } ++
+    // if i have 0 flow or already open, i don't have to add anything
       (if ((current.flow == 0 || open.contains(current))) {
-         Set[(Int, Set[Node])]()
+         Set.empty
        } else {
+        // otherwise take into account also the opening of the current one
          candidates.map {
            case (n, o, m) => {
-             val foo = handleMemo(n, o + current, m - 1)
-             (foo._1 + current.flow * (minute-1), foo._2)
+               handleMemo(n, o + current, m - 1, repeat) + current.flow * (minute - 1)
            }
          }
        })
 
-    val foo = sureCandidates.toList.maxBy(_._1)
-
-    foo
-
-//    {
-//      case (n, o, m) => {
-//        if (memo.contains((n, o, m))) {
-//          memo((n, o, m))
-//        } else {
-//          buildMatrix(n, o, m)
-//        }
-//      }
-//    }
-
-//    val sureCandidates: Set[Int] = candidates.map {
-//      case (n, o, m) => {
-//        if (memo.contains((n, o, m))) {
-//          memo((n, o, m))
-//        } else {
-//          buildMatrix(n, o, m)
-//        }
-//      }
-//    }
-
-//    if (current.flow == 0 || open.contains(current)) {
-//
-//      candidates.map {
-//        case (n, o, m) => {
-//          if (memo.contains((n, o, m))) {
-//            memo.get((n, o, m))
-//          } else {
-//            buildMatrix(n, o, m)
-//          }
-//        }
-//      }
-//
-//      nextPossibleNodes
-//        .map(n => buildMatrix(n, open, minute + 1))
-//        .reduce(_ ++ _)
-//
-//    } else {
-//      nextPossibleNodes
-//        .map(n => buildMatrix(n, open, minute + 1))
-//        .reduce(_ ++ _) ++
-//        nextPossibleNodes
-//          .map(n =>
-//            buildMatrix(
-//              n,
-//              open + current,
-//              actualFlow + (minute + current.flow),
-//              minute + 2,
-//              nodes
-//            )
-//          )
-//          .reduce(_ ++ _)reduce
-//    }
+   sureCandidates.max
 
   }
 
-  private def handleMemo(n: Node, o: Set[Node], m: Int) = {
-    if (!memo.contains((n, o, m))) {
-      memo.put((n, o, m), buildMatrix(n, o, m))
+  private def handleMemo(n: Node, o: Set[Node], m: Int, repeat: Boolean): Int = {
+    if (!memo.contains((n, o, m, repeat))) {
+      memo.put((n, o, m, repeat), buildMatrix(n, o, m, repeat))
     }
-    memo((n, o, m))
+    memo((n, o, m, repeat))
   }
 
-  def parseLine(s: String) = {
+  def parseLine(s: String): Node = {
     val name = s.split(" ")(1)
     val flow = s.split(";")(0).split("=")(1).toInt
     val edges = s.contains("valves") match {
