@@ -4,6 +4,12 @@ import utils.ReadFile
 
 object Two extends App:
 
+  // format: off
+  val first  = (x: Seq[Int]) => x.sliding(2).forall { case Seq(a, b) => a < b && Seq(1, 2, 3).contains(b - a) }
+  val second = (x: Seq[Int]) => x.sliding(2).forall { case Seq(a, b) => a > b && Seq(1, 2, 3).contains(a - b) }
+  val kindaPermutations = (x: Seq[Int]) => { (0 until x.length).map(i => x.patch(i, Nil, 1)) }
+  //format: on
+
   println(one())
   println(two())
 
@@ -11,25 +17,16 @@ object Two extends App:
     ReadFile
       .getLines(2, false)
       .map(_.split(" ").map(_.toInt).toSeq)
-      .filter { list =>
-        // format: off
-        list.sliding(2).forall { case Seq(a, b) => a < b && Seq(1,2,3).contains(b-a) } || list.sliding(2).forall { case Seq(a, b) => a > b && Seq(1,2,3).contains(a-b) }
-        //format: on
-
-      }
+      .filter { x => first(x) || second(x) }
       .length
 
   def two() =
-    // format: off
-
-    val first  = (x: Seq[Int]) => x.sliding(2).forall { case Seq(a, b) => a < b && Seq(1, 2, 3).contains(b - a) }
-    val second = (x: Seq[Int]) => x.sliding(2).forall { case Seq(a, b) => a > b && Seq(1, 2, 3).contains(a - b) }
-    
-    val kindaPermutations = (x: Seq[Int]) => { (0 until x.length).map(i => x.patch(i, Nil, 1)) }
-
     ReadFile
       .getLines(2)
       .map(_.split(" ").map(_.toInt).toSeq)
-      .filter { list =>
-        first(list) || second(list) || kindaPermutations(list).exists(first) || kindaPermutations(list).exists(second)
-      }.length
+      .filter { x => 
+        //format: off
+        first(x) || second(x) || kindaPermutations(x).exists(first) || kindaPermutations(x).exists(second)
+        //format: on
+      }
+      .length
