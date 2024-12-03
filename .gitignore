@@ -3,4 +3,5 @@
 haskell/
 ruby/
 
-*.txt
+**/*.txt
+**/*.txt.example
