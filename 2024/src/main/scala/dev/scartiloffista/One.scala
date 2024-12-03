@@ -1,7 +1,8 @@
 package dev.scartiloffista
+import dev.scartiloffista.utils.ReadFile
 
 @main def one() =
-  val input = utils.ReadFile.getLines(1)
+  val input = ReadFile.getLines(1)
   val numbers = input
     .map(_.split("\\s+").map(_.toInt).toSeq)
     .transpose
@@ -18,7 +19,7 @@ package dev.scartiloffista
   // .foreach(println)
 
 @main def two() =
-  val input = utils.ReadFile.getLines(1)
+  val input = ReadFile.getLines(1)
   val numbers = input
     .map(_.split("\\s+").map(_.toInt).toSeq)
     .transpose
