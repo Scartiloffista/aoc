@@ -5,3 +5,4 @@ ruby/
 
 **/*.txt
 **/*.txt.example
+**/.scala-build

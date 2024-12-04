@@ -9,7 +9,6 @@ object Three extends App:
     println(one(filtered))
 
   def one(input: String) =
-    // val input = utils.ReadFile.getLines(3, true).mkString("")
     val mulPattern = """mul\(\d+,\d+\)""".r
     val numPattern = """\d+""".r
     mulPattern

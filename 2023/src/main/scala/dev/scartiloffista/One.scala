@@ -2,7 +2,7 @@ package dev.scartiloffista
 
 import dev.scartiloffista.utils.ReadFile
 
-val lines = ReadFile.getLines("1")
+val lines = ReadFile.getLines(1)
 
 def p1: Int =
   val linesDigits = lines.map { l => l.filter(_.isDigit) }
